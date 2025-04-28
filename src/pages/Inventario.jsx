@@ -53,41 +53,58 @@ const Inventario = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Inventario</h2>
+    <div className="container my-5">
+      <h2 className="text-center mb-4">Inventario de Productos</h2>
 
-      <ul>
+      <div className="row">
         {productos.map((prod) => (
-          <li key={prod.id}>
-            {prod.nombre} - {prod.cantidad} unidades
-            <button onClick={() => editarProducto(prod)} style={{ marginLeft: "10px" }}>
-              Editar
-            </button>
-            <button onClick={() => eliminarProducto(prod.id)} style={{ marginLeft: "5px" }}>
-              Eliminar
-            </button>
-          </li>
+          <div key={prod.id} className="col-md-4 mb-3">
+            <div className="card shadow-sm h-100">
+              <div className="card-body d-flex flex-column justify-content-between">
+                <h5 className="card-title">{prod.nombre}</h5>
+                <p className="card-text">Cantidad: {prod.cantidad} unidades</p>
+                <div className="d-flex justify-content-between">
+                  <button onClick={() => editarProducto(prod)} className="btn btn-warning btn-sm">
+                    Editar
+                  </button>
+                  <button onClick={() => eliminarProducto(prod.id)} className="btn btn-danger btn-sm">
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <input
-          type="text"
-          placeholder="Nombre del producto"
-          value={nuevoProducto}
-          onChange={(e) => setNuevoProducto(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Cantidad"
-          value={nuevaCantidad}
-          onChange={(e) => setNuevaCantidad(e.target.value)}
-        />
-        {modoEdicion ? (
-          <button onClick={guardarEdicion}>Guardar cambios</button>
-        ) : (
-          <button onClick={agregarProducto}>Agregar</button>
-        )}
+      <div className="card mt-5 p-4 shadow">
+        <h4 className="card-title text-center mb-3">
+          {modoEdicion ? "Editar Producto" : "Agregar Nuevo Producto"}
+        </h4>
+        <div className="mb-3">
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Nombre del producto"
+            value={nuevoProducto}
+            onChange={(e) => setNuevoProducto(e.target.value)}
+          />
+        </div>
+        <div className="mb-3">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Cantidad"
+            value={nuevaCantidad}
+            onChange={(e) => setNuevaCantidad(e.target.value)}
+          />
+        </div>
+        <button
+          onClick={modoEdicion ? guardarEdicion : agregarProducto}
+          className={`btn ${modoEdicion ? "btn-success" : "btn-primary"} w-100`}
+        >
+          {modoEdicion ? "Guardar cambios" : "Agregar producto"}
+        </button>
       </div>
     </div>
   );
