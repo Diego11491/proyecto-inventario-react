@@ -132,10 +132,10 @@ const Inventario = () => {
         {productos.map((prod) => (
           <div key={prod.id} className="col-md-4 mb-3">
             <div className="card shadow-sm h-100">
-              <div className="card-body d-flex flex-column justify-content-between">
+              <div className="card-body d-flex fPlex-column justify-content-between">
                 <h5 className="card-title">{prod.nombre}</h5>
 
-                <p className="card-text">Productos: {prod.cantidad} Cantidades</p>
+                <p className="card-text">Producto: {prod.cantidad} Unidades</p>
 
                 <div className="d-flex justify-content-between">
                   <button onClick={() => editarProducto(prod)} className="btn btn-warning btn-sm">
