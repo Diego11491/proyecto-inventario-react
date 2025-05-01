@@ -1,30 +1,77 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { supabase } from '../supabaseClient';
 
 const Inventario = () => {
-  const [productos, setProductos] = useState([
-    { id: 1, nombre: "Manzanas", cantidad: 10 },
-    { id: 2, nombre: "Naranjas", cantidad: 5 },
-  ]);
-
+  const [productos, setProductos] = useState([]);
   const [nuevoProducto, setNuevoProducto] = useState("");
   const [nuevaCantidad, setNuevaCantidad] = useState("");
   const [modoEdicion, setModoEdicion] = useState(false);
   const [productoEditando, setProductoEditando] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const agregarProducto = () => {
+  useEffect(() => {
+    const fetchProductos = async () => {
+      setLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('productos') // Asegúrate de que este sea el nombre de tu tabla en Supabase
+          .select('*')
+          .order('id', { ascending: false }); // Ordenar por ID descendente para mostrar los últimos primero
+
+        if (error) {
+          setError("Error al cargar los productos.");
+          console.error("Error fetching productos:", error);
+        } else {
+          setProductos(data);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProductos();
+  }, []);
+
+  const agregarProducto = async () => {
     if (nuevoProducto && nuevaCantidad) {
-      const nuevo = {
-        id: Date.now(),
-        nombre: nuevoProducto,
-        cantidad: parseInt(nuevaCantidad),
-      };
-      setProductos([...productos, nuevo]);
-      limpiarFormulario();
+      try {
+        const { data, error } = await supabase
+          .from('productos')
+          .insert([{ nombre: nuevoProducto, cantidad: parseInt(nuevaCantidad) }])
+          .select();
+
+        if (error) {
+          setError("Error al agregar el producto.");
+          console.error("Error adding producto:", error);
+        } else if (data && data.length > 0) {
+          setProductos([data[0], ...productos]); // Agregar el nuevo producto al inicio de la lista
+          limpiarFormulario();
+        }
+      } catch (error) {
+        setError("Error inesperado al agregar el producto.");
+        console.error("Unexpected error adding producto:", error);
+      }
     }
   };
 
-  const eliminarProducto = (id) => {
-    setProductos(productos.filter((p) => p.id !== id));
+  const eliminarProducto = async (id) => {
+    try {
+      const { error } = await supabase
+        .from('productos')
+        .delete()
+        .match({ id });
+
+      if (error) {
+        setError("Error al eliminar el producto.");
+        console.error("Error deleting producto:", error);
+      } else {
+        setProductos(productos.filter((p) => p.id !== id));
+      }
+    } catch (error) {
+      setError("Error inesperado al eliminar el producto.");
+      console.error("Unexpected error deleting producto:", error);
+    }
   };
 
   const editarProducto = (producto) => {
@@ -34,23 +81,48 @@ const Inventario = () => {
     setNuevaCantidad(producto.cantidad);
   };
 
-  const guardarEdicion = () => {
-    setProductos(
-      productos.map((p) =>
-        p.id === productoEditando.id
-          ? { ...p, nombre: nuevoProducto, cantidad: parseInt(nuevaCantidad) }
-          : p
-      )
-    );
-    limpiarFormulario();
-    setModoEdicion(false);
-    setProductoEditando(null);
+  const guardarEdicion = async () => {
+    if (productoEditando) {
+      try {
+        const { error } = await supabase
+          .from('productos')
+          .update({ nombre: nuevoProducto, cantidad: parseInt(nuevaCantidad) })
+          .match({ id: productoEditando.id });
+
+        if (error) {
+          setError("Error al guardar los cambios.");
+          console.error("Error updating producto:", error);
+        } else {
+          setProductos(
+            productos.map((p) =>
+              p.id === productoEditando.id
+                ? { ...p, nombre: nuevoProducto, cantidad: parseInt(nuevaCantidad) }
+                : p
+            )
+          );
+          limpiarFormulario();
+          setModoEdicion(false);
+          setProductoEditando(null);
+        }
+      } catch (error) {
+        setError("Error inesperado al guardar los cambios.");
+        console.error("Unexpected error updating producto:", error);
+      }
+    }
   };
 
   const limpiarFormulario = () => {
     setNuevoProducto("");
     setNuevaCantidad("");
   };
+
+  if (loading) {
+    return <div className="text-center">Cargando inventario...</div>;
+  }
+
+  if (error) {
+    return <div className="alert alert-danger text-center">{error}</div>;
+  }
 
   return (
     <div className="container my-5">
