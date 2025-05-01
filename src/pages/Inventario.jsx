@@ -134,7 +134,7 @@ const Inventario = () => {
             <div className="card shadow-sm h-100">
               <div className="card-body d-flex flex-column justify-content-between">
                 <h5 className="card-title">{prod.nombre}</h5>
-                <p className="card-text">Variedades: {prod.cantidad} stock</p>
+                <p className="card-text">Producto: {prod.cantidad} Unidades</p>
                 <div className="d-flex justify-content-between">
                   <button onClick={() => editarProducto(prod)} className="btn btn-warning btn-sm">
                     Editar
