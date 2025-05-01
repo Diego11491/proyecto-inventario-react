@@ -135,7 +135,7 @@ const Inventario = () => {
               <div className="card-body d-flex fPlex-column justify-content-between">
                 <h5 className="card-title">{prod.nombre}</h5>
 
-                <p className="card-text">Cantidad: {prod.cantidad} Unidades</p>
+                <p className="card-text">Cantidad: {prod.cantidad} unidades</p>
 
                 <div className="d-flex justify-content-between">
                   <button onClick={() => editarProducto(prod)} className="btn btn-warning btn-sm">
