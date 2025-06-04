@@ -1,12 +1,10 @@
-name: Ejecutar pruebas
+name: Ejecutar pruebas con Vitest
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   test:
@@ -16,7 +14,7 @@ jobs:
       - name: Clonar repositorio
         uses: actions/checkout@v3
 
-      - name: Usar Node.js
+      - name: Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
