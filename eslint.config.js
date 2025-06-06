@@ -9,12 +9,26 @@ export default [
     files: ['**/*.{js,jsx}'],
     languageOptions: {
       ecmaVersion: 2020,
-      globals: globals.browser,
+      // Se combinan los globals de browser con algunos de Jest
+      globals: {
+        ...globals.browser,
+        // Definición de globals para Jest
+        describe: 'readonly',
+        test: 'readonly',
+        expect: 'readonly',
+        beforeEach: 'readonly',
+        afterEach: 'readonly',
+        jest: 'readonly'
+      },
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
       },
+    },
+    // Se añade el entorno "jest" para que ESLint cargue sus globals
+    env: {
+      jest: true,
     },
     plugins: {
       'react-hooks': reactHooks,
