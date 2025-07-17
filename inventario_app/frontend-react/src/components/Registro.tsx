@@ -6,7 +6,7 @@ interface RegistroProps {
   onRegistrado?: () => void;
 }
 
-function Registro({ onRegistrado }: RegistroProps) {
+function Registro({ onRegistrado: _onRegistrado }: RegistroProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -21,7 +21,7 @@ function Registro({ onRegistrado }: RegistroProps) {
 
     // Registro utilizando Supabase Magic Link y almacenando datos adicionales.
     // Se especifica emailRedirectTo apuntando al frontend en el puerto 5173.
-    const { data, error } = await supabase.auth.signUp({
+    const { data: _data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
