@@ -70,17 +70,14 @@ def actualizar_producto(id: str, prod: ProductoUpdate):
     supabase.table("productos").update(data).eq("id", id).execute()
     return {"mensaje": "Producto actualizado correctamente"}
 
-# 🔴 Eliminar producto (VERSIÓN CORREGIDA)
+# 🔴 Eliminar producto
+
+
 @app.delete("/productos/{id}")
 def eliminar_producto(id: str):
-    # Primero, verificamos si el producto existe
     existente = supabase.table("productos").select("id").eq("id", id).execute()
-    
-    # Si no hay datos, lanzamos el error 404 y terminamos aquí
     if not existente.data:
-        raise HTTPException(status_code=404, detail="Producto no encontrado")
+        raise HTTPException(404, detail="Producto no encontrado")
 
-    # Solo si existe, eliminamos y devolvemos éxito
     supabase.table("productos").delete().eq("id", id).execute()
     return {"mensaje": "Producto eliminado correctamente"}
-
