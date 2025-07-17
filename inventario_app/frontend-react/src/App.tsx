@@ -47,7 +47,7 @@ function App() {
           nombre: nombreBusqueda || undefined, // ✅ búsqueda textual
         },
       });
-      const productosConTipo: Producto[] = (res.data as any[]).map((p: any) =>
+      const productosConTipo: Producto[] = res.data.map((p: any) =>
         p.tipo === 'fisico' ? { ...p } as ProductoFisico : { ...p } as ProductoDigital
       );
       setProductos(productosConTipo);
