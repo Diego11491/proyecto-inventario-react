@@ -1,0 +1,37 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      # Modificado para apuntar a tu carpeta
+      - 'inventario_app/frontend-react/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      # Modificado para apuntar a tu carpeta
+      - 'inventario_app/frontend-react/**'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        # Modificado para trabajar dentro de tu carpeta
+        working-directory: ./inventario_app/frontend-react
+
+    steps:
+    - name: Checkout del código
+      uses: actions/checkout@v3
+
+    - name: Configurar Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Instalar dependencias
+      run: npm install
+      
+    - name: Construir el proyecto
+      run: npm run build
