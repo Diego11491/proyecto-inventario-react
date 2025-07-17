@@ -6,7 +6,7 @@ url = os.getenv("SUPABASE_URL", "https://gzwdnjmgcokkagxahazu.supabase.co")
 key = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6d2Ruam1nY29ra2FneGFoYXp1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MDM5MDMyOSwiZXhwIjoyMDY1OTY2MzI5fQ.QdusUmT7oQvmbOZ-NU_gwdYUQaJCWmsntErvQQRKLIk")
 supabase: Client = create_client(url, key)
 
-# Probando la ejecución del workflow del backend
+# Re-probando el workflow del backend con la corrección
 
 def obtener_productos(tipo: str = None, orden: str = None, nombre: str = None):
     query = supabase.table("productos").select("*")
