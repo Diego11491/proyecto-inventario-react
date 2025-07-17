@@ -30,7 +30,7 @@ jobs:
     - name: Instalar dependencias
       run: |
         python -m pip install --upgrade pip
-        # Asegúrate de que pytest esté en tu requirements.txt
+        python -m pip install --upgrade setuptools wheel
         pip install -r requirements.txt
         
     - name: Ejecutar pruebas
