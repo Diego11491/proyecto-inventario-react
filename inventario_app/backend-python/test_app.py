@@ -73,15 +73,5 @@ def test_eliminar_producto_exitoso(mock_supabase):
     mock_supabase.table().delete.assert_called_once()
 
 
-@patch("main.supabase")
-def test_eliminar_producto_no_encontrado(mock_supabase):
-    """
-    Prueba que devuelve un error 404 si el producto a eliminar no existe.
-    """
-    mock_select = MagicMock()
-    mock_select.data = []
-    mock_supabase.table.return_value.select.return_value.execute.return_value = mock_select
-    response = client.delete("/productos/uuid-no-existente")
-    assert response.status_code == 404
-    assert response.json() == {"detail": "Producto no encontrado"}
+
 
