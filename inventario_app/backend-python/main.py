@@ -81,6 +81,6 @@ def eliminar_producto(id: str):
     if not existente.data:
         raise HTTPException(status_code=404, detail="Producto no encontrado")
 
-    # Este código solo se ejecuta si el producto SÍ exist
+    # Este código solo se ejecuta si el producto SÍ existe
     supabase.table("productos").delete().eq("id", id).execute()
     return {"mensaje": "Producto eliminado correctamente"}
