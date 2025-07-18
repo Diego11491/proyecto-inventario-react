@@ -2,8 +2,23 @@
 FROM node:20 AS build
 
 WORKDIR /app
+
+# Copiar package files primero (mejor para cache de Docker)
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm ci
+
+# Copiar archivos de configuración necesarios para Tailwind
+COPY tailwind.config.js ./
+COPY postcss.config.js ./
+COPY vite.config.ts ./
+COPY tsconfig.json ./
+
+# Copiar el resto del código fuente
 COPY . .
-RUN npm install
+
+# Build (ahora Tailwind debería procesarse correctamente)
 RUN npm run build
 
 # Etapa 2: servir con NGINX
