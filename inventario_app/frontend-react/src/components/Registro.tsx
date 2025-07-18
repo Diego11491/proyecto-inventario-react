@@ -2,11 +2,8 @@
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
 
-interface RegistroProps {
-  onRegistrado?: () => void;
-}
 
-function Registro({ onRegistrado }: RegistroProps) {
+function Registro() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -21,7 +18,7 @@ function Registro({ onRegistrado }: RegistroProps) {
 
     // Registro utilizando Supabase Magic Link y almacenando datos adicionales.
     // Se especifica emailRedirectTo apuntando al frontend en el puerto 5173.
-    const { data, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -64,7 +61,7 @@ function Registro({ onRegistrado }: RegistroProps) {
   return (
     <form onSubmit={handleRegistro} className="bg-white p-6 rounded shadow-md w-full max-w-sm">
       {mensaje && <p className="mb-2 text-center text-red-500">{mensaje}</p>}
-      
+
       <div className="mb-4">
         <label className="block text-gray-700">Nombre</label>
         <input
@@ -76,7 +73,7 @@ function Registro({ onRegistrado }: RegistroProps) {
           required
         />
       </div>
-      
+
       <div className="mb-4">
         <label className="block text-gray-700">Apellido</label>
         <input
@@ -88,7 +85,7 @@ function Registro({ onRegistrado }: RegistroProps) {
           required
         />
       </div>
-      
+
       <div className="mb-4">
         <label className="block text-gray-700">Número de celular</label>
         <input
@@ -100,7 +97,7 @@ function Registro({ onRegistrado }: RegistroProps) {
           required
         />
       </div>
-      
+
       <div className="mb-4">
         <label className="block text-gray-700">Correo electrónico</label>
         <input
@@ -112,7 +109,7 @@ function Registro({ onRegistrado }: RegistroProps) {
           required
         />
       </div>
-      
+
       <div className="mb-4">
         <label className="block text-gray-700">Contraseña</label>
         <input
@@ -124,7 +121,7 @@ function Registro({ onRegistrado }: RegistroProps) {
           required
         />
       </div>
-      
+
       <button type="submit" className="bg-indigo-600 text-white w-full px-4 py-2 rounded hover:bg-indigo-700">
         Registrarme
       </button>

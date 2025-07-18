@@ -1,6 +1,7 @@
 // src/components/Confirmacion.tsx
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 
 function Confirmacion() {
   const navigate = useNavigate();
@@ -14,6 +15,12 @@ function Confirmacion() {
       // Verificamos si la sesión está activa
       const { data, error } = await supabase.auth.getSession();
 
+      if (error) {
+        console.error("Error al obtener la sesión:", error);
+        setMensaje("❌ Error al confirmar tu cuenta. Inténtalo nuevamente.");
+        return;
+      }
+      
       if (data.session?.user) {
         console.log("✅ Usuario confirmado:", data.session.user);
         setMensaje(`✅ Registro exitoso para: ${data.session.user.email}`);

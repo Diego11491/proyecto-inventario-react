@@ -11,9 +11,13 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.52.0",
+    "axios": "^1.10.0",
     "react-router-dom": "^7.6.3"
   },
   "devDependencies": {
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
     "vitest": "^3.2.4"
   }
 }

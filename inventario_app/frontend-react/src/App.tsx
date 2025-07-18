@@ -26,12 +26,22 @@ type ProductoDigital = {
 
 type Producto = ProductoFisico | ProductoDigital;
 
+// ✅ Type guards para verificar tipos
+const isProductoFisico = (producto: Producto): producto is ProductoFisico => {
+  return producto.tipo === 'fisico';
+};
+
+const isProductoDigital = (producto: Producto): producto is ProductoDigital => {
+  return producto.tipo === 'digital';
+};
+
 function App() {
   const [usuario, setUsuario] = useState<any>(null);
   const [mostrarRegistro, setMostrarRegistro] = useState(false);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [tipoProducto, setTipoProducto] = useState<'fisico' | 'digital'>('fisico');
-  const [productoEnEdicion, setProductoEnEdicion] = useState<Producto | null>(null);
+  const [productoEnEdicion, setProductoEnEdicion] = useState<ProductoFisico | ProductoDigital | null>(null);
+
 
   // 🔍 Filtros y búsqueda
   const [tipoFiltro, setTipoFiltro] = useState('');
@@ -44,10 +54,11 @@ function App() {
         params: {
           tipo: tipoFiltro || undefined,
           orden: orden || undefined,
-          nombre: nombreBusqueda || undefined, // ✅ búsqueda textual
+          nombre: nombreBusqueda || undefined, //  búsqueda textual
         },
       });
-      const productosConTipo: Producto[] = res.data.map((p: any) =>
+      // Mejor typing para la respuesta
+      const productosConTipo: Producto[] = (res.data as any[]).map((p: any) =>
         p.tipo === 'fisico' ? { ...p } as ProductoFisico : { ...p } as ProductoDigital
       );
       setProductos(productosConTipo);
@@ -81,11 +92,22 @@ function App() {
     }
   }, [usuario]);
 
+  // Función para obtener producto en edición con tipo correcto
+  const getProductoEnEdicionFisico = (): ProductoFisico | null => {
+    if (!productoEnEdicion) return null;
+    return isProductoFisico(productoEnEdicion) ? productoEnEdicion : null;
+  };
+
+  const getProductoEnEdicionDigital = (): ProductoDigital | null => {
+    if (!productoEnEdicion) return null;
+    return isProductoDigital(productoEnEdicion) ? productoEnEdicion : null;
+  };
+
   return !usuario ? (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4">
       {mostrarRegistro ? (
         <>
-          <Registro onRegistrado={() => setMostrarRegistro(false)} />
+          <Registro />
           <div className="text-center mt-4">
             <button onClick={() => setMostrarRegistro(false)} className="text-indigo-600 hover:underline">
               ¿Ya tenés cuenta? Iniciá sesión
@@ -105,7 +127,7 @@ function App() {
     </div>
   ) : (
     <div className="min-h-screen bg-gray-100 p-6 flex flex-col items-center gap-8">
-      {/* 🔝 Header */}
+      {/*  Header */}
       <header className="flex w-full justify-between max-w-5xl items-center mb-4">
         <h1 className="text-2xl font-bold text-gray-800">🧮 Inventario</h1>
         <div className="flex items-center gap-4">
@@ -118,7 +140,7 @@ function App() {
         </div>
       </header>
 
-      {/* 🔎 Filtros y búsqueda */}
+      {/* Filtros y búsqueda */}
       <div className="flex flex-wrap gap-4 items-center max-w-5xl w-full">
         <select value={tipoFiltro} onChange={(e) => setTipoFiltro(e.target.value)} className="border px-3 py-2 rounded">
           <option value="">Todos los tipos</option>
@@ -169,9 +191,8 @@ function App() {
             setTipoProducto('fisico');
             setProductoEnEdicion(null);
           }}
-          className={`px-4 py-2 rounded-lg font-semibold ${
-            tipoProducto === 'fisico' ? 'bg-indigo-600 text-white' : 'bg-white border'
-          }`}
+          className={`px-4 py-2 rounded-lg font-semibold ${tipoProducto === 'fisico' ? 'bg-indigo-600 text-white' : 'bg-white border'
+            }`}
         >
           Producto Físico
         </button>
@@ -180,35 +201,34 @@ function App() {
             setTipoProducto('digital');
             setProductoEnEdicion(null);
           }}
-          className={`px-4 py-2 rounded-lg font-semibold ${
-            tipoProducto === 'digital' ? 'bg-indigo-600 text-white' : 'bg-white border'
-          }`}
+          className={`px-4 py-2 rounded-lg font-semibold ${tipoProducto === 'digital' ? 'bg-indigo-600 text-white' : 'bg-white border'
+            }`}
         >
           Producto Digital
         </button>
       </div>
 
-      {/* ✍️ Formulario según tipo */}
+      {/*  Formulario según tipo -  LÍNEA 211 CORREGIDA */}
       {tipoProducto === 'fisico' ? (
         <FormularioFisico
           onProductoGuardado={cargarProductos}
-          productoEnEdicion={productoEnEdicion as ProductoFisico | null}
+          productoEnEdicion={getProductoEnEdicionFisico()}
           cancelarEdicion={() => setProductoEnEdicion(null)}
         />
       ) : (
         <FormularioDigital
           onProductoGuardado={cargarProductos}
-          productoEnEdicion={productoEnEdicion as ProductoDigital | null}
+          productoEnEdicion={getProductoEnEdicionDigital()}
           cancelarEdicion={() => setProductoEnEdicion(null)}
         />
       )}
 
-      {/* 📋 Lista */}
+      {/*  Lista */}
       <ListaProductos
         productos={productos}
         onEliminarProducto={cargarProductos}
         onEditar={(producto) => {
-          setProductoEnEdicion(producto);
+          setProductoEnEdicion(producto as Producto);
           setTipoProducto(producto.tipo);
         }}
       />
