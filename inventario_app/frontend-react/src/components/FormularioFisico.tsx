@@ -37,7 +37,7 @@ const FormularioFisico = ({ onProductoGuardado, productoEnEdicion, cancelarEdici
 
     try {
       if (productoEnEdicion?.id) {
-        await axios.put(`http://localhost:8000/productos/${productoEnEdicion.id}`, {
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/productos/${productoEnEdicion.id}`, {
           id: productoEnEdicion.id,
           nombre,
           precio: parseFloat(precio),
@@ -46,7 +46,7 @@ const FormularioFisico = ({ onProductoGuardado, productoEnEdicion, cancelarEdici
         });
         setMensaje('✏️ Producto físico actualizado');
       } else {
-        await axios.post('http://localhost:8000/productos', {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/productos`, {
           nombre,
           precio: parseFloat(precio),
           stock: parseInt(stock),

@@ -50,7 +50,7 @@ function App() {
 
   const cargarProductos = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/productos', {
+      const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/productos`, {
         params: {
           tipo: tipoFiltro || undefined,
           orden: orden || undefined,

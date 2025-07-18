@@ -27,7 +27,7 @@ function Registro() {
           lastName,
           phone,
         },
-        emailRedirectTo: 'http://localhost:5173/confirmacion',
+        emailRedirectTo: import.meta.env.VITE_FRONTEND_REDIRECT,
       },
     });
 

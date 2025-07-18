@@ -3,13 +3,16 @@ FROM node:20 AS build
 
 WORKDIR /app
 
-# Copiar package files primero (mejor para cache de Docker)
+# Copiar .env PRIMERO para que Vite lo vea al instalar y compilar
+COPY .env .env
+
+# Copiar package files primero
 COPY package*.json ./
 
 # Instalar dependencias
 RUN npm ci
 
-# Copiar archivos de configuración necesarios para Tailwind
+# Copiar archivos de configuración
 COPY tailwind.config.js ./
 COPY postcss.config.js ./
 COPY vite.config.ts ./
@@ -18,7 +21,7 @@ COPY tsconfig.json ./
 # Copiar el resto del código fuente
 COPY . .
 
-# Build (ahora Tailwind debería procesarse correctamente)
+# Build (Vite usará variables .env)
 RUN npm run build
 
 # Etapa 2: servir con NGINX

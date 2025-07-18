@@ -37,7 +37,7 @@ const FormularioDigital = ({ onProductoGuardado, productoEnEdicion, cancelarEdic
 
     try {
       if (productoEnEdicion?.id) {
-        await axios.put(`http://localhost:8000/productos/${productoEnEdicion.id}`, {
+        await axios.put(`${import.meta.env.VITE_BACKEND_URL}/productos/${productoEnEdicion.id}`, {
           id: productoEnEdicion.id,
           nombre,
           precio: parseFloat(precio),
@@ -46,7 +46,7 @@ const FormularioDigital = ({ onProductoGuardado, productoEnEdicion, cancelarEdic
         });
         setMensaje('✏️ Producto digital actualizado');
       } else {
-        await axios.post('http://localhost:8000/productos', {
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/productos`, {
           nombre,
           precio: parseFloat(precio),
           licencia,

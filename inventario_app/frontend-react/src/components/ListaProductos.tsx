@@ -19,7 +19,7 @@ const ListaProductos = ({ productos, onEliminarProducto, onEditar }: Props) => {
   const eliminar = async (id: string) => {
     if (!confirm("¿Eliminar este producto?")) return;
     try {
-      await axios.delete(`http://localhost:8000/productos/${id}`);
+      await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/productos/${id}`);
       onEliminarProducto();
     } catch {
       alert("❌ No se pudo eliminar el producto");
