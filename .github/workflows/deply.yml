@@ -20,7 +20,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/app
+            cd ~/proyecto-inventario-react
             git pull origin main
             docker-compose down
             docker-compose up --build -d
