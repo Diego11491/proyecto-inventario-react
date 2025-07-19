@@ -1,5 +1,4 @@
-name:  Deploy a EC2 AWS
-
+name: Deploy a EC2 AWS
 on:
   push:
     branches:
@@ -8,12 +7,12 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v3
-
-      - name:  Establecer conexión SSH y desplegar
+       
+      - name: Establecer conexión SSH y desplegar
         uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.HOST_EC2 }}
@@ -21,6 +20,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/proyecto-inventario-react
-            git pull origin main
+            
+            # Detener contenedores primero (si están corriendo)
             docker-compose down
+            
+            # Limpiar cambios locales y hacer pull
+            git reset --hard HEAD
+            git clean -fd
+            git pull origin main
+            
+            # Construir e iniciar contenedores
             docker-compose up --build -d
+            
+            # Verificar que los contenedores estén corriendo
+            docker-compose ps
