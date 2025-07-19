@@ -6,12 +6,13 @@ from inventario_supabase import obtener_productos
 
 app = FastAPI()
 
-# 🌐 Permitir conexión desde el frontend local
+#  Permitir conexión desde el frontend local
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
     "http://localhost:3000",
-    "http://localhost:5173"],
+    "http://localhost:5173",
+    "http://3.145.72.16:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
