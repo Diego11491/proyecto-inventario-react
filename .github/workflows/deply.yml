@@ -22,16 +22,12 @@ jobs:
           script: |
             cd ~/proyecto-inventario-react
             
-            # Detener contenedores primero (si están corriendo)
             docker-compose down
             
-            # Limpiar cambios locales y hacer pull
             git reset --hard HEAD
             git clean -fd
             git pull origin main
             
-            # Construir e iniciar contenedores
             docker-compose up --build -d
             
-            # Verificar que los contenedores estén corriendo
             docker-compose ps
